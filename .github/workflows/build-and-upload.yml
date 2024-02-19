@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [stable,nightly]
+        rust: [nightly]
         clang: [16]
         php: [8.3]
-        phpts: [nts,ts]
+        phpts: [nts]
     env:
       CARGO_TERM_COLOR: always
     steps:
