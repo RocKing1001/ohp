@@ -34,6 +34,8 @@ jobs:
       - run: rustup show
       - name: php info
         run: php -i
+      - name: php config
+        run: php-config
       - name: Cache cargo dependencies
         uses: Swatinem/rust-cache@v2
         # if: matrix.rust == 'stable'
