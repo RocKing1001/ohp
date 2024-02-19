@@ -27,10 +27,6 @@ pub fn get_module(module: ModuleBuilder) -> ModuleBuilder {
     module.info_function(php_module_info)
 }
 
-mod test {
-
-}
-
 #[cfg(test)]
 mod tests {
     #[test]
