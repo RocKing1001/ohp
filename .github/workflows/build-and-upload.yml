@@ -32,6 +32,8 @@ jobs:
           toolchain: ${{ matrix.rust }}
           components: rustfmt, clippy
       - run: rustup show
+      - name: php info
+        run: php -i
       - name: Cache cargo dependencies
         uses: Swatinem/rust-cache@v2
         # if: matrix.rust == 'stable'
