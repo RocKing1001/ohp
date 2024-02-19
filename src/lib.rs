@@ -26,3 +26,15 @@ pub extern "C" fn php_module_info(_module: *mut ModuleEntry) {
 pub fn get_module(module: ModuleBuilder) -> ModuleBuilder {
     module.info_function(php_module_info)
 }
+
+mod test {
+
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn dummy_test() {
+        assert_eq!(true, true);
+    }
+}
