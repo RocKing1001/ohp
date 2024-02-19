@@ -18,7 +18,8 @@ impl Ohp {
 
 pub extern "C" fn php_module_info(_module: *mut ModuleEntry) {
     info_table_start!();
-    info_table_row!("newstd", "enabled");
+    info_table_row!("Oxidised Home Page", "enabled");
+    info_table_row!("OHP Version", env!("CARGO_PKG_VERSION"));
     info_table_end!();
 }
 
