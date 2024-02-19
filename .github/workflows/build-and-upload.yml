@@ -11,12 +11,21 @@ jobs:
     strategy:
       matrix:
         rust: [stable]
-        clang: ["16"]
+        clang: [16]
+        php: [8.3]
+        phpts: [ts] # nts for non thread safe
     env:
       CARGO_TERM_COLOR: always
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+        env:
+          phpts: ${{ matrix.phpts }}
+          debug: true
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@master
         with:
