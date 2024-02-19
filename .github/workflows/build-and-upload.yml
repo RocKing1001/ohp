@@ -34,21 +34,19 @@ jobs:
       - run: rustup show
       - name: php info
         run: php -i
-      - name: php config
-        run: php-config
-      - name: Cache cargo dependencies
-        uses: Swatinem/rust-cache@v2
-        # if: matrix.rust == 'stable'
-        with:
-          # increment this manually to force cache eviction
-          prefix-key: "v0-rust"
+      # - name: Cache cargo dependencies
+      #   uses: Swatinem/rust-cache@v2
+      #   # if: matrix.rust == 'stable'
+      #   with:
+      #     # increment this manually to force cache eviction
+      #     prefix-key: "v0-rust"
       # LLVM & Clang
-      - name: Cache LLVM and Clang
-        id: cache-llvm
-        uses: actions/cache@v3
-        with:
-          path: ${{ runner.temp }}/llvm-${{ matrix.clang }}
-          key: ubuntu-latest-llvm-${{ matrix.clang }}
+      # - name: Cache LLVM and Clang
+      #   id: cache-llvm
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ runner.temp }}/llvm-${{ matrix.clang }}
+      #     key: ubuntu-latest-llvm-${{ matrix.clang }}
       - name: Setup LLVM & Clang
         id: clang
         uses: KyleMayes/install-llvm-action@v1
