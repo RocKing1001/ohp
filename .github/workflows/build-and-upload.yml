@@ -70,5 +70,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: libohp.so
+          name: libohp-rust_${{matrix.rust}}-clang_${{matrix.clang}}-php_${{matrix.php}}_${{matrix.phpts}}
           path: target/release/libohp.so
