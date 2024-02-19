@@ -1,44 +1,63 @@
-name: Build the library
+name: Build and upload artifacts
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-env:
-  CARGO_TERM_COLOR: always
+
 jobs:
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [stable]
+        clang: ["16"]
+    env:
+      CARGO_TERM_COLOR: always
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup rust
-        uses: dtolnay/rust-toolchain@stable
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: stable
+          toolchain: ${{ matrix.rust }}
           components: rustfmt, clippy
       - run: rustup show
       - name: Cache cargo dependencies
         uses: Swatinem/rust-cache@v2
+        # if: matrix.rust == 'stable'
         with:
+          # increment this manually to force cache eviction
           prefix-key: "v0-rust"
+      # LLVM & Clang
       - name: Cache LLVM and Clang
         id: cache-llvm
         uses: actions/cache@v3
         with:
           path: ${{ runner.temp }}/llvm-${{ matrix.clang }}
-          key: ${{ matrix.os }}-llvm-${{ matrix.clang }}
-      - name: Setup Clang
+          key: ubuntu-latest-llvm-${{ matrix.clang }}
+      - name: Setup LLVM & Clang
+        id: clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: ${{ matrix.clang }}
+          directory: ${{ runner.temp }}/llvm-${{ matrix.clang }}
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
+      - name: Configure Clang
         run: |
           echo "LIBCLANG_PATH=${{ runner.temp }}/llvm-${{ matrix.clang }}/lib" >> $GITHUB_ENV
           echo "LLVM_VERSION=${{ steps.clang.outputs.version }}" >> $GITHUB_ENV
           echo "LLVM_CONFIG_PATH=${{ runner.temp }}/llvm-${{ matrix.clang }}/bin/llvm-config" >> $GITHUB_ENV
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "16.0"
+      # Build
       - name: Build
-        run: cargo build --verbose --release
+        run: cargo build --release
+      # Test & lint
+      - name: Test inline examples
+        run: cargo test --release --all --features closure,anyhow --no-fail-fast
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+      - name: Run clippy
+        run: cargo clippy --all -- -D warnings
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
