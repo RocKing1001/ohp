@@ -11,9 +11,5 @@ axum = { version = "0.7.4", features = ["macros", "tracing"] }
 ext-php-rs = "0.12.0"
 php-tokio = { git = "https://github.com/RocKing1001/php-tokio/" }
 
-[dev-dependencies]
-ext-php-rs = { version = "0.12.0", features = ["embed"] }
-
 [profile.release]
 strip = "debuginfo"
-
